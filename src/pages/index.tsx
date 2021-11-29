@@ -1,8 +1,10 @@
 import { GetStaticProps } from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
 
 import Prismic from '@prismicio/client';
 import { FiUser, FiCalendar } from 'react-icons/fi';
+import { useState } from 'react';
 import Header from '../components/Header';
 import { getPrismicClient } from '../services/prismic';
 
@@ -33,23 +35,36 @@ interface HomeProps {
 
 export default function Home(props: HomeProps): JSX.Element {
   const { postsPagination } = props;
+  const loadMessage = 'Carregar mais posts';
+
   const results = [...postsPagination.results];
-  const nextPageLink = postsPagination.next_page;
-  const hasLoadMore = true;
+  let nextPageLink = postsPagination.next_page;
+
+  const [morePosts, setMorePosts] = useState(results);
+  const [hasLoadMore, setHasLoadMore] = useState(true);
+  const [loadingMessage, setLoadingMessage] = useState(loadMessage);
 
   async function loadMorePosts(nextPage): Promise<void> {
     let moreResults;
 
-    const response = await fetch(nextPage);
     try {
+      const response = await fetch(nextPage);
       if (response.status === 200) {
+        setLoadingMessage('Carregando...');
+
         moreResults = await response.json();
+
+        if (moreResults.next_page === null) {
+          setHasLoadMore(false);
+        } else {
+          setLoadingMessage(loadMessage);
+          nextPageLink = moreResults.next_page;
+        }
       }
     } catch (error) {
       throw new Error(error.message);
     }
-
-    return console.log(moreResults.results);
+    return setMorePosts([...morePosts, ...moreResults.results]);
   }
 
   return (
@@ -57,13 +72,18 @@ export default function Home(props: HomeProps): JSX.Element {
       <Head>
         <title>Home | spacetravelling.</title>
       </Head>
-      <div className={styles.wrapper}>
+      <div className={commonStyles.wrapper}>
         <Header />
-        <main>
-          {results.map(post => {
+        <main className={styles.posts}>
+          {morePosts.map(post => {
             return (
               <article key={post.uid}>
-                <h1>{post.data.title}</h1>
+                <h1>
+                  <Link href={`/post/${post.uid}`}>
+                    <a>{post.data.title}</a>
+                  </Link>
+                </h1>
+
                 <p>{post.data.subtitle}</p>
                 <div>
                   <time>
@@ -84,7 +104,7 @@ export default function Home(props: HomeProps): JSX.Element {
               className={styles.loadPosts}
               onClick={() => loadMorePosts(nextPageLink)}
             >
-              Carregar mais posts
+              {loadingMessage}
             </button>
           ) : (
             ''
