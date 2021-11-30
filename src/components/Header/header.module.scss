@@ -1,4 +1,19 @@
-.logo {
-  width: 100%;
-  padding: 0 0 4rem 0;
+.header {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+
+  width: 700px;
+  height: 105px;
+  margin: 0 auto;
+
+  a {
+    cursor: pointer;
+  }
+
+  .logo {
+    display:block;
+    width: 239px;
+    height: 27px;
+  }
 }

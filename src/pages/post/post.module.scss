@@ -1,3 +1,10 @@
+.banner {
+  display: flex;
+  justify-content: center;
+  max-width: 1440px;
+  margin: 0 auto 1.5rem;
+}
+
 .post{
 
   h1 {
@@ -29,6 +36,36 @@
       font-size: 0.875rem;
       color: var(--info);
       margin-left: 1.5rem;
+    }
+  }
+
+  .postContent{
+    h2 {
+      font-size: 2.25rem;
+      font-weight: bold;
+      color: var(--heading);
+      line-height: 3.15rem;
+    }
+
+    p {
+      font-size: 1.125rem;
+      font-weight: normal;
+      color: var(--body);
+      line-height: 1.575rem;
+      margin-bottom: 1.5rem;
+    }
+
+    li {
+      font-size: 1.125rem;
+      font-weight: normal;
+      color: var(--body);
+      line-height: 1.575rem;
+      margin-bottom: 1.5rem;
+
+    }
+
+    a {
+      color: var(--highlight)
     }
   }
 }

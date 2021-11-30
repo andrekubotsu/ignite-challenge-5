@@ -5,6 +5,9 @@ import Link from 'next/link';
 import Prismic from '@prismicio/client';
 import { FiUser, FiCalendar } from 'react-icons/fi';
 import { useState } from 'react';
+
+import { formatDate } from '../utils/dateFormat';
+
 import Header from '../components/Header';
 import { getPrismicClient } from '../services/prismic';
 
@@ -72,8 +75,9 @@ export default function Home(props: HomeProps): JSX.Element {
       <Head>
         <title>Home | spacetravelling.</title>
       </Head>
+
+      <Header />
       <div className={commonStyles.wrapper}>
-        <Header />
         <main className={styles.posts}>
           {morePosts.map(post => {
             return (
@@ -87,7 +91,7 @@ export default function Home(props: HomeProps): JSX.Element {
                 <p>{post.data.subtitle}</p>
                 <div>
                   <time>
-                    <FiCalendar /> {post.first_publication_date}
+                    <FiCalendar /> {formatDate(post.first_publication_date)}
                   </time>
                   <span className={styles.author}>
                     <FiUser />
